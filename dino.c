@@ -250,50 +250,44 @@ void game_ctrl(void)
             {
                 game_map[row_temp][col_temp] = game_map[row_temp][col_temp + 1]; // Move the cacti to left one column
             }
-            
+
             game_map[row_temp][15] = 0; // Set the last column to 0
         }
 
         // Choose one random row to generate cactus
         // Because rand() seems not working in SDCC,so I use my own rand
-        // Generate a random number 
+
+        // Generate a random number
         myRand = myRand * 17 + 23;
-        myRand ^= (myRand >> 3) | (myRand << 2); // Make it more random
+        //Generate Upper row cactus
         if (myRand % 3 == 0)
         {
 
-            // [1][14] has cactus，[0][15] cannot has cactus
-            if (game_map[1][14])
+            // [1][14] has cactus，[0][15] cannot have cactus
+            if (game_map[1][14]==0)
             {
-                if (myRand % 2)
-                {
-                    game_map[1][15] = 1; // Generate cactus at row 1 col 15
-                }
+
+                    game_map[0][15] = 1; // Generate cactus at row 0 col 15
+
             }
-            else
-            {
-                game_map[0][15] = 1; // Generate cactus at row 0 col 15
-            }
+
         }
+        //Generate Lowwer row cactus
         else if (myRand % 3 == 1)
         {
             // [0][14] has CACtus，[1][15] cannot have cactus
-            if (game_map[0][14])
+            if (game_map[0][14]==0)
             {
-                if (myRand % 2)
-                {
-                    game_map[0][15] = 1; // Generate cactus at row 0 col 15
-                }
+
+                    game_map[1][15] = 1; // Generate cactus at row 1 col 15
+
             }
-            else
-            {
-                game_map[1][15] = 1; // Generate cactus at row 1 col 15
-            }
+
         }
         if (game_map[dino_row][0])
         {
             game_over = (char)1; // If the dino is at the same position as the cactus, game over
-                                        
+
             return; // Game finish
         }
         else if (game_map[1 - dino_row][0])
@@ -308,6 +302,7 @@ void game_ctrl(void)
         ThreadYield();
     }
 }
+
 void main(void)
 {
 
